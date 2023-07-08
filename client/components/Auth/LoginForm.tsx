@@ -155,7 +155,7 @@ const LoginForm: NextPage = () => {
 
                     <div className="mt-3">
                       <p className="mb-0  text-center">
-                        Don't have an account?{' '}
+                        Dont have an account?{' '}
                         <Link href="/signup" className="text-primary fw-bold">
                           Sign Up
                         </Link>

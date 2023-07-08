@@ -107,7 +107,7 @@ const SignupForm: NextPage = () => {
                             />
 
                             <Form.Control.Feedback type="invalid">
-                              First Name can't be empty.
+                              First Name cannot be empty.
                               {/* {errors['password']} */}
                             </Form.Control.Feedback>
                           </Form.Group>
@@ -131,7 +131,7 @@ const SignupForm: NextPage = () => {
                             />
 
                             <Form.Control.Feedback type="invalid">
-                              Last Name can't be empty.
+                              Last Name cannot be empty.
                               {/* {errors['password']} */}
                             </Form.Control.Feedback>
                           </Form.Group>
