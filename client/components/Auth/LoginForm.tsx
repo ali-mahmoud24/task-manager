@@ -10,6 +10,7 @@ import { useContext, useState } from 'react';
 import { Col, Button, Row, Container, Card, Form } from 'react-bootstrap';
 
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { AuthContext } from '../../context/auth-context';
 import AuthContextType from '../../models/authContext';
@@ -155,9 +156,9 @@ const LoginForm: NextPage = () => {
                     <div className="mt-3">
                       <p className="mb-0  text-center">
                         Don't have an account?{' '}
-                        <a href="/signup" className="text-primary fw-bold">
+                        <Link href="/signup" className="text-primary fw-bold">
                           Sign Up
-                        </a>
+                        </Link>
                       </p>
                     </div>
                   </div>

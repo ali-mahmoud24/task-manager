@@ -8,6 +8,7 @@ import { Formik } from 'formik';
 import { useContext, useState } from 'react';
 
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { AuthContext } from '../../context/auth-context';
 import AuthContextType from '../../models/authContext';
@@ -197,9 +198,9 @@ const SignupForm: NextPage = () => {
                     <div className="mt-3">
                       <p className="mb-0  text-center">
                         Already a member?{' '}
-                        <a href="/" className="text-primary fw-bold">
+                        <Link href="/" className="text-primary fw-bold">
                           Log In
-                        </a>
+                        </Link>
                       </p>
                     </div>
                   </div>

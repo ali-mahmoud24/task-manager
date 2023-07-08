@@ -94,7 +94,7 @@ const UpdateTask = (props: UpdateTaskProps) => {
                   />
 
                   <Form.Control.Feedback type="invalid">
-                    Tile can't be empty.
+                    Title cant be empty.
                   </Form.Control.Feedback>
                 </Form.Group>
               </Modal.Body>
