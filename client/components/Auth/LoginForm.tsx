@@ -146,7 +146,6 @@ const LoginForm: NextPage = () => {
                               disabled={!isValid || isSubmitting}
                             >
                               {isLoading ? 'Loading…' : 'Login'}
-                              {/* Login */}
                             </Button>
                           </div>
                         </Form>

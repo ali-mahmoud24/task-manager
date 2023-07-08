@@ -188,7 +188,7 @@ const SignupForm: NextPage = () => {
                               variant="primary"
                               type="submit"
                             >
-                              Register
+                              {isLoading ? 'Loading…' : 'Signup'}
                             </Button>
                           </div>
                         </Form>
