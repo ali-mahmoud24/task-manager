@@ -7,6 +7,12 @@ export enum Status {
   UNCOMPLETED = 'Uncompleted',
 }
 
+type Time = {
+  hours: number;
+  minutes: number;
+  seconds: number;
+};
+
 @Schema()
 export class Task extends Document {
   @Prop()
@@ -15,8 +21,12 @@ export class Task extends Document {
   @Prop({ default: Status.UNCOMPLETED })
   status: Status;
 
-  @Prop({ required: false })
-  timeSpent: string;
+  @Prop({
+    required: false,
+    type: Object,
+    default: { hours: 0, minutes: 0, seconds: 0 },
+  })
+  timeSpent: Time;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: User;

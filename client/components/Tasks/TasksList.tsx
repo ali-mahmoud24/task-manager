@@ -9,18 +9,18 @@ import Accordion from 'react-bootstrap/Accordion';
 interface TasksListProps {
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<any>>;
+  onDelete: (id: string) => void;
+  onUpdate: (id: string, taskData: { status?: string; title: string }) => void;
 }
 
-const TasksList = (props: TasksListProps) => {
-  const { tasks } = props;
+type SearchInputs = {
+  title?: string;
+  status?: string;
+};
 
+const TasksList = ({ tasks, onDelete, onUpdate }: TasksListProps) => {
   const [title, setTitle] = useState('');
   const [status, setStatus] = useState('');
-
-  type SearchInputs = {
-    title?: string;
-    status?: string;
-  };
 
   const findTasksHandler = ({ title, status }: SearchInputs) => {
     if (title !== undefined) {
@@ -42,18 +42,6 @@ const TasksList = (props: TasksListProps) => {
     [tasks, title, status]
   );
 
-  const taskDeletedHandler = (deletetaskId: string) => {
-    props.setTasks((prevTasks: Task[]) =>
-      prevTasks.filter((task: Task) => task.id !== deletetaskId)
-    );
-  };
-
-  const [show, setShow] = useState<boolean>(false);
-
-  const showModal = () => {
-    setShow(true);
-  };
-
   return (
     <>
       <TaskSearch title={title} status={status} onSearch={findTasksHandler} />
@@ -61,7 +49,7 @@ const TasksList = (props: TasksListProps) => {
         data-bs-theme="dark"
         defaultActiveKey="0"
         flush
-        style={{ width: '80vw' }}
+        style={{ width: '100%' }}
       >
         {filteredTasks.map((task: Task) => (
           <TaskItem
@@ -70,7 +58,8 @@ const TasksList = (props: TasksListProps) => {
             title={task.title}
             status={task.status}
             timeSpent={task.timeSpent}
-            onDelete={taskDeletedHandler}
+            onDelete={onDelete}
+            onUpdate={onUpdate}
           />
         ))}
       </Accordion>

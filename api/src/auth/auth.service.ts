@@ -29,6 +29,11 @@ export class AuthService {
   ) {
     const { firstName, lastName, email, password } = signUpDto;
 
+    const user = await this.userModel.findOne({ email });
+    if (user) {
+      throw new UnauthorizedException('Email already exists');
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await this.userModel.create({

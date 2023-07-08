@@ -22,7 +22,9 @@ export class TasksService {
 
   async getTasks(user: User): Promise<Task[]> {
     try {
-      const loadedTasks = await this.taskModel.find({ user: user.id });
+      const loadedTasks = await this.taskModel
+        .find({ user: user.id })
+        .sort({ _id: -1 });
       return loadedTasks;
     } catch (err) {
       console.log(err);
@@ -59,7 +61,6 @@ export class TasksService {
 
   async updateTask(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
     return await this.taskModel.findByIdAndUpdate(id, updateTaskDto, {
-      new: true,
       runValidators: true,
     });
   }

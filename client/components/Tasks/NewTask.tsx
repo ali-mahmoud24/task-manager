@@ -4,52 +4,23 @@ import Modal from 'react-bootstrap/Modal';
 
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { useContext, useState } from 'react';
-
-import axios from 'axios';
-import { AuthContext } from '../../context/auth-context';
-import AuthContextType from '../../models/authContext';
 
 interface NewTaskProps {
   show: boolean;
   setShow: (val: boolean) => void;
+  onAdd: (values: { title: string }) => void;
 }
 
 const NewTask = (props: NewTaskProps) => {
-  const { show, setShow } = props;
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const { token } = useContext(AuthContext) as AuthContextType;
+  const { show, setShow, onAdd } = props;
 
   const handleClose = () => setShow(false);
-
-  const handleFormSubmit = async (values: any) => {
-    const taskData = {
-      title: values.title,
-    };
-    try {
-      setIsLoading(true);
-
-      const addTaskResponse = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/tasks`,
-        taskData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      setShow(false);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   return (
     <>
       <Modal show={show} onHide={handleClose}>
         <Formik
-          onSubmit={handleFormSubmit}
+          onSubmit={onAdd}
           initialValues={initialValues}
           validationSchema={schema}
         >
@@ -71,6 +42,7 @@ const NewTask = (props: NewTaskProps) => {
                 <Form.Group className="mb-3" controlId="title">
                   <Form.Label className="text-center">Title</Form.Label>
                   <Form.Control
+                    autoFocus
                     type="text"
                     placeholder="Title"
                     onBlur={handleBlur}

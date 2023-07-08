@@ -8,6 +8,12 @@ import {
 
 import { User } from 'src/auth/schema/user.schema';
 
+type Time = {
+  hours: number;
+  minutes: number;
+  seconds: number;
+};
+
 export class CreateTaskDto {
   @IsNotEmpty()
   @IsString()
@@ -16,6 +22,9 @@ export class CreateTaskDto {
   @IsOptional()
   @IsEnum(['Completed', 'Uncompleted'], { message: 'Use Correct status' })
   readonly status: 'Completed' | 'Uncompleted';
+
+  @IsOptional()
+  readonly timeSpent: Time;
 
   @IsEmpty({ message: "You can't pass user id" })
   readonly user: User;

@@ -13,15 +13,22 @@ import { useRouter } from 'next/router';
 
 import { AuthContext } from '../../context/auth-context';
 import AuthContextType from '../../models/authContext';
+import AlertDanger from '../UI/Alert';
 
 const LoginForm: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(false);
+
+  const [errorMsg, setErrorMsg] = useState<string>('');
 
   const { login } = useContext(AuthContext) as AuthContextType;
 
   const router = useRouter();
 
-  const handleFormSubmit = async (values) => {
+  const handleFormSubmit = async (values: {
+    email: string;
+    password: string;
+  }) => {
     const loginData = {
       email: values.email,
       password: values.password,
@@ -33,23 +40,28 @@ const LoginForm: NextPage = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
         loginData
       );
+      console.log(loginResponse);
 
-      const { token, userId } = loginResponse.data;
-
-      if (token) {
+      if (loginResponse.status === 201) {
         setIsLoading(false);
+        const { token, userId } = loginResponse.data;
+        console.log(token, userId);
         login(token, userId);
         router.push('/tasks');
       }
     } catch (err) {
       console.log(err);
+      setErrorMsg('Wrong Email or password!');
+      setShow(true);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div>
+    <>
+      <AlertDanger message={errorMsg} show={show} setShow={setShow} />;
       <Container>
-        <Row className="vh-100 d-flex justify-content-center align-items-center">
+        <Row className="vh-70 d-flex justify-content-center align-items-center">
           <Col md={8} lg={6} xs={12}>
             <div className="border border-3 border-primary"></div>
             <Card className="shadow">
@@ -133,7 +145,8 @@ const LoginForm: NextPage = () => {
                               type="submit"
                               disabled={!isValid || isSubmitting}
                             >
-                              Login
+                              {isLoading ? 'Loading…' : 'Login'}
+                              {/* Login */}
                             </Button>
                           </div>
                         </Form>
@@ -155,7 +168,7 @@ const LoginForm: NextPage = () => {
           </Col>
         </Row>
       </Container>
-    </div>
+    </>
   );
 };
 

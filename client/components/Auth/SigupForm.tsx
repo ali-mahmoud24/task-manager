@@ -11,17 +11,23 @@ import { useRouter } from 'next/router';
 
 import { AuthContext } from '../../context/auth-context';
 import AuthContextType from '../../models/authContext';
+import AlertDanger from '../UI/Alert';
 
 const SignupForm: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>('');
 
   const { login } = useContext(AuthContext) as AuthContextType;
 
   const router = useRouter();
 
-  const handleFormSubmit = async (values) => {
-    console.log('submitting');
-    console.log(values);
+  const handleFormSubmit = async (values: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }) => {
     const signUpData = {
       firstName: values.firstName,
       lastName: values.lastName,
@@ -36,22 +42,25 @@ const SignupForm: NextPage = () => {
         signUpData
       );
 
-      const { token, userId } = signupResponse.data;
-
-      if (token) {
+      if (signupResponse.status === 201) {
+        const { token, userId } = signupResponse.data;
+        login(token, userId);
         setIsLoading(false);
-        login(token, login);
         router.push('/tasks');
       }
     } catch (err) {
       console.log(err);
+      setErrorMsg('Email already exists!');
+      setShow(true);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div>
+    <>
+      <AlertDanger message={errorMsg} show={show} setShow={setShow} />;
       <Container>
-        <Row className="vh-100 d-flex justify-content-center align-items-center">
+        <Row className="vh-70 d-flex justify-content-center align-items-center">
           <Col md={8} lg={6} xs={12}>
             <div className="border border-3 border-primary"></div>
             <Card className="shadow">
@@ -200,7 +209,7 @@ const SignupForm: NextPage = () => {
           </Col>
         </Row>
       </Container>
-    </div>
+    </>
   );
 };
 

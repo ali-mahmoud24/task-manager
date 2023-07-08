@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as yup from 'yup';
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -17,47 +17,23 @@ interface UpdateTaskProps {
   setShow: (val: boolean) => void;
   taskId: string;
   task: Task;
+  onUpdate: (id: string, taskData: { status?: string; title: string }) => void;
 }
 
 const UpdateTask = (props: UpdateTaskProps) => {
-  const { show, setShow, taskId } = props;
+  const { show, setShow, taskId, task, onUpdate } = props;
 
-  const [loadedTask, setLoadedTask] = useState();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { token } = useContext(AuthContext) as AuthContextType;
 
   const handleClose = () => setShow(false);
 
-  // useEffect(() => {
-  //   const fetchTask = async () => {
-  //     try {
-  //       setIsLoading(true);
-  //       const response = await axios.get(
-  //         `${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`,
-  //         {
-  //           headers: { Authorization: `Bearer ${token}` },
-  //         }
-  //       );
-
-  //       if (response.status === 200) {
-  //         setIsLoading(false);
-  //         const task = response.data;
-  //         setLoadedTask(task);
-  //       }
-  //     } catch (err) {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   fetchTask();
-  // }, [taskId]);
-
   const initialValues = {
-    title: props.task.title,
+    title: task.title,
   };
 
-  const handleFormSubmit = async (values: any) => {
-    console.log(values);
+  const handleFormSubmit = async (values: { title: string }) => {
     const taskData = {
       title: values.title,
     };
@@ -71,6 +47,8 @@ const UpdateTask = (props: UpdateTaskProps) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+
+      onUpdate(taskId, { title: values.title });
 
       setShow(false);
     } catch (err) {
@@ -104,6 +82,7 @@ const UpdateTask = (props: UpdateTaskProps) => {
                 <Form.Group className="mb-3" controlId="title">
                   <Form.Label className="text-center">Title</Form.Label>
                   <Form.Control
+                    autoFocus
                     type="text"
                     placeholder="Title"
                     onBlur={handleBlur}
